@@ -66,7 +66,7 @@ resource "aws_db_parameter_group" "fast_food_pedidos" {
 }
 
 resource "aws_db_instance" "fast_food_pedidos" {
-  identifier             = "fast-food-db"
+  identifier             = "fast-food-pedidos-db"
   instance_class         = "db.t3.micro"
   allocated_storage      = 5
   engine                 = "postgres"
