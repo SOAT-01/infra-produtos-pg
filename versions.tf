@@ -18,7 +18,6 @@ terraform {
     bucket         = "tf-state-bucket-4567"
     key            = "rds-produtos/main.tf"
     region         = "us-east-1"
-    profile        = "default"
     encrypt        = true
     dynamodb_table = "terraform-state-lock"
   }
