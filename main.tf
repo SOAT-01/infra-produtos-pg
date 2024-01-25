@@ -10,7 +10,7 @@ data "aws_availability_zones" "available" {}
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name                 = "fast_food_pedidos"
+  name                 = "fast_food_produtos"
   cidr                 = "10.1.0.0/16"
   azs                  = data.aws_availability_zones.available.names
   public_subnets       = ["10.1.4.0/24", "10.1.5.0/24", "10.1.6.0/24"]
@@ -18,17 +18,17 @@ module "vpc" {
   enable_dns_support   = true
 }
 
-resource "aws_db_subnet_group" "fast_food_pedidos" {
-  name       = "fast_food_pedidos"
+resource "aws_db_subnet_group" "fast_food_produtos" {
+  name       = "fast_food_produtos"
   subnet_ids = module.vpc.public_subnets
 
   tags = {
-    Name = "fast_food_pedidos"
+    Name = "fast_food_produtos"
   }
 }
 
 resource "aws_security_group" "rds" {
-  name   = "fast_food_pedidos_rds"
+  name   = "fast_food_produtos_rds"
   vpc_id = module.vpc.vpc_id
 
   ingress {
@@ -46,12 +46,12 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name = "fast_food_pedidos_rds"
+    Name = "fast_food_produtos_rds"
   }
 }
 
-resource "aws_db_parameter_group" "fast_food_pedidos" {
-  name   = "fast-food-pedidos-parameter-group"
+resource "aws_db_parameter_group" "fast_food_produtos" {
+  name   = "fast-food-produtos-parameter-group"
   family = "postgres15"
 
   parameter {
@@ -65,17 +65,17 @@ resource "aws_db_parameter_group" "fast_food_pedidos" {
   }
 }
 
-resource "aws_db_instance" "fast_food_pedidos" {
-  identifier             = "fast-food-pedidos-db"
+resource "aws_db_instance" "fast_food_produtos" {
+  identifier             = "fast-food-produtos-db"
   instance_class         = "db.t3.micro"
   allocated_storage      = 5
   engine                 = "postgres"
   engine_version         = "15.3"
   username               = var.db_user
   password               = var.db_password
-  db_subnet_group_name   = aws_db_subnet_group.fast_food_pedidos.name
+  db_subnet_group_name   = aws_db_subnet_group.fast_food_produtos.name
   vpc_security_group_ids = [aws_security_group.rds.id]
-  parameter_group_name   = aws_db_parameter_group.fast_food_pedidos.name
+  parameter_group_name   = aws_db_parameter_group.fast_food_produtos.name
   publicly_accessible    = true
   skip_final_snapshot    = true
   apply_immediately      = true
@@ -84,13 +84,13 @@ resource "aws_db_instance" "fast_food_pedidos" {
 
 provider "postgresql" {
   scheme   = "postgres"
-  host     = aws_db_instance.fast_food_pedidos.address
+  host     = aws_db_instance.fast_food_produtos.address
   port     = var.db_port
   username = var.db_user
   password = var.db_password
 }
 
-resource "postgresql_database" "fast_food_pedidos" {
+resource "postgresql_database" "fast_food_produtos" {
   name              = var.db_name
   owner             = var.db_user
   connection_limit  = -1
