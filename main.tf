@@ -51,7 +51,7 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_db_parameter_group" "fast_food_pedidos" {
-  name   = "fast-food-parameter-group"
+  name   = "fast-food-pedidos-parameter-group"
   family = "postgres15"
 
   parameter {
